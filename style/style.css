@@ -1,0 +1,204 @@
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #000000;
+      margin: 0;
+    }
+
+    /* Glow effect for text and icons */
+    .glow-white {
+      color: white;
+      text-shadow:
+        0 0 5px #b6b6b6,
+        0 0 10px #b6b6b6,
+    }
+
+    .glow-white-transparent {
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow:
+        0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 6px rgba(255, 255, 255, 0.2),
+        0 0 10px rgba(255, 255, 255, 0.15);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+
+    /* Button star icon glow */
+    .btn-star {
+      color: white;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 15px #fff;
+    }
+
+    /* Glow effect for Try AI text */
+    .btn-text-glow {
+      color: white;
+      text-shadow:
+        0 0 5px #b6b6b6,
+        0 0 10px #b6b6b6,
+        0 0 20px #b6b6b6;
+      font-weight: 600;
+    }
+
+
+    /* FX Intelligence reveal text animation */
+    @keyframes fx-reveal {
+      0% {
+        opacity: 0;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0));
+      }
+
+      50% {
+        opacity: 0.5;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+      }
+
+      100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+      }
+    }
+
+    .fx-reveal-text {
+      animation: fx-reveal 1.5s ease forwards;
+    }
+
+    /* Header background and border */
+    header {
+      background-color: #1b1b1b;
+      /* Tailwind gray-600 */
+      border-bottom: 2px solid #2c2c2c;
+      /* Tailwind gray-400 */
+    }
+
+    /* Logo icon styling */
+    #logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #fff);
+      user-select: none;
+      transition: all 0.3s ease;
+      /* Position control */
+      position: relative;
+      top: 0;
+      left: -175PX;
+    }
+
+    /* Logo text styling */
+    #logo-text {
+      font-weight: 200px;
+      font-size: 1rem;
+      color: white;
+      text-shadow:
+        0 0 40px #fff;
+      user-select: none;
+      transition: all 0.3s ease;
+      /* Position control */
+      position: relative;
+      top: 0;
+      left: -170PX;
+    }
+
+    /* Responsive adjustments for logo text */
+    @media (min-width: 640px) {
+      #logo-text {
+        font-size: 2rem;
+      }
+    }
+
+    /* Try AI button position control */
+    #try-ai-btn {
+      transition: all 0.3s ease;
+      position: relative;
+      top: 0;
+      right: -95px;
+    }
+
+    #main-title {
+      font-size: 5rem;
+      /* ukuran huruf */
+      font-weight: 900;
+      /* ketebalan */
+      color: white;
+      /* warna */
+      text-align: center;
+      /* posisi tengah */
+
+      letter-spacing: 15px;
+      /* jarak antar huruf */
+      line-height: 2px;
+      /* tinggi antar baris */
+
+      margin-top: -90px;
+      /* jarak dari atas */
+      margin-bottom: 180px;
+      /* jarak ke bawah */
+
+      text-shadow:
+        0 0 40px #fff;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      padding: 1.5rem;
+      transition: all 0.5s ease;
+    }
+
+    .glass-card h4 {
+      color: #fff;
+      /* heading tetap putih */
+    }
+
+    .glass-card p {
+      color: rgba(255, 255, 255, 0.8);
+      /* teks paragraf sedikit transparan */
+    }
+
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+      transform: translateY(-5px);
+    }
+
+    /* Fade-in effect for section */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in-up.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Smooth progress bar animation */
+    #technology [data-percent] {
+      transition: width 3s ease-out;
+      /* pelan dan smooth */
+    }
+
+    .fade-in {
+      opacity: 0;
+      /* awalnya tidak terlihat */
+      transition: opacity 10s ease;
+      /* durasi animasi */
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      /* saat muncul, jadi terlihat */
+    }
+
+
+#dark-overlay {
+  transition: opacity 0.7s ease;
+}

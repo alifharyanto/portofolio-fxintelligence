@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000, #242424, #1f1f1f);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .mac-header {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+        }
+
+        .mac-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .mac-red {
+            background: #ff5f56;
+        }
+
+        .mac-yellow {
+            background: #ffbd2e;
+        }
+
+        .mac-green {
+            background: #27c93f;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: "Fira Code", monospace;
+            color: #dcdcdc;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center py-10 px-5">
+
+    <h1 class="text-4xl font-bold mb-8 drop-shadow-lg">FX Intelligence Model</h1>
+
+    <!-- Setup Steps -->
+    <div class="glass-card w-full max-w-4xl p-6 mb-10">
+        <h2 class="text-2xl font-semibold mb-4">📦 Setup Project</h2>
+        <ol class="list-decimal list-inside space-y-3 text-white/90">
+            <li>Install Python (3.9+ disarankan).</li>
+            <li>Buat folder project baru, misalnya: <code>ml_chatbot</code>.</li>
+            <li>Buat file <code>app.py</code> untuk kode chatbot.</li>
+            <li>Install dependencies dengan command:
+                <pre><code>pip install pandas scikit-learn</code></pre>
+            </li>
+            <li>Siapkan file <code>data.csv</code> dengan kolom: <code>pertanyaan</code> dan <code>jawaban</code>.</li>
+            <li>Jalankan program dengan:
+                <pre><code>python app.py</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <!-- Code Section 1 -->
+    <div class="glass-card w-full max-w-4xl mb-10">
+        <!-- MacOS Header -->
+        <div class="mac-header">
+            <div class="mac-btn mac-red"></div>
+            <div class="mac-btn mac-yellow"></div>
+            <div class="mac-btn mac-green"></div>
+        </div>
+
+        <!-- Code Block -->
+        <div class="relative">
+            <button class="copy-btn absolute top-2 right-2">Copy</button>
+            <pre><code>
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+class MLChatbot:
+    def __init__(self, csv_file: str):
+        data = pd.read_csv(csv_file)
+        self.question_list = data["question"].tolist()
+        self.answer_list = data["answer"].tolist()
+
+        self.vectorizer = CountVectorizer()
+        self.X = self.vectorizer.fit_transform(self.question_list)
+
+    def reply(self, user_question: str) -> str:
+        user_vec = self.vectorizer.transform([user_question])
+        similarity = cosine_similarity(user_vec, self.X)
+        idx = similarity.argmax()
+        if similarity[0, idx] < 0.1:
+            return "Sorry, I don't know the answer"
+        return self.answer_list[idx]
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Code Section 2 -->
+    <div class="glass-card w-full max-w-4xl">
+        <!-- MacOS Header -->
+        <div class="mac-header">
+            <div class="mac-btn mac-red"></div>
+            <div class="mac-btn mac-yellow"></div>
+            <div class="mac-btn mac-green"></div>
+        </div>
+
+        <!-- Code Block -->
+        <div class="relative">
+            <button class="copy-btn absolute top-2 right-2">Copy</button>
+            <pre><code>
+question,answer
+"Who are you?","I am your AI assistant."
+"What is your name?","My name is AI"    
+"Why do we sleep?","To rest and recover energy."
+"How old are you?","I don't have an age, I am an AI."
+            </code></pre>
+        </div>
+    </div>
+    <!-- Footer -->
+<footer class="w-full text-center py-6 mt-16 border-t border-white/20 text-sm text-white/60">
+  <div class="flex justify-center gap-6">
+    <a href="../index.html#home" class="hover:text-white transition">Home</a>
+    <a href="../index.html#features" class="hover:text-white transition">Features</a>
+    <a href="../index.html#technology" class="hover:text-white transition">Technology</a>
+    <a href="../index.html#skills" class="hover:text-white transition">Skills</a>
+    <a href="../index.html#projects" class="hover:text-white transition">Projects</a>
+  </div>
+  <p class="mt-4">&copy; 2025 FX Intelligence. All rights reserved.</p>
+</footer>
+
+
+
+
+    <script>
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const codeBlock = btn.nextElementSibling.innerText;
+                navigator.clipboard.writeText(codeBlock).then(() => {
+                    btn.textContent = "Copied ✓";
+                    setTimeout(() => {
+                        btn.textContent = "Copy";
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

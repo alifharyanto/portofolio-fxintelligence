@@ -1,1 +1,1 @@
-# portofolio-fxintelligence
+https://my.spline.design/genkubgreetingrobot-QGaxy8kajwsAyI7akuajM4rF/
