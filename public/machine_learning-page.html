@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Model Project</title>
+    <title>FX Intelligence Model</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #000000, #242424, #1f1f1f);
+            background: linear-gradient(135deg, #000000, #1a1a1a, #252525);
             color: white;
             font-family: 'Poppins', sans-serif;
         }
@@ -17,8 +17,41 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        select,
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 7px;
+            padding: 20px 10px;
+            color: white;
+            outline: none;
+        }
+
+        select option {
+            background: #1f1f1f;
+            color: white;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: "Fira Code", monospace;
+            color: #dcdcdc;
         }
 
         .mac-header {
@@ -45,20 +78,6 @@
             background: #27c93f;
         }
 
-        pre {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 16px;
-            border-radius: 12px;
-            overflow-x: auto;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        code {
-            font-family: "Fira Code", monospace;
-            color: #dcdcdc;
-        }
-
         .copy-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -70,7 +89,7 @@
         }
 
         .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
         }
     </style>
 </head>
@@ -79,106 +98,156 @@
 
     <h1 class="text-4xl font-bold mb-8 drop-shadow-lg">FX Intelligence Model</h1>
 
-    <!-- Setup Steps -->
+    <!-- MODEL SELECTION -->
     <div class="glass-card w-full max-w-4xl p-6 mb-10">
-        <h2 class="text-2xl font-semibold mb-4">📦 Setup Project</h2>
-        <ol class="list-decimal list-inside space-y-3 text-white/90">
-            <li>Install Python (3.9+ disarankan).</li>
-            <li>Buat folder project baru, misalnya: <code>ml_chatbot</code>.</li>
-            <li>Buat file <code>app.py</code> untuk kode chatbot.</li>
-            <li>Install dependencies dengan command:
-                <pre><code>pip install pandas scikit-learn</code></pre>
-            </li>
-            <li>Siapkan file <code>data.csv</code> dengan kolom: <code>pertanyaan</code> dan <code>jawaban</code>.</li>
-            <li>Jalankan program dengan:
-                <pre><code>python app.py</code></pre>
-            </li>
-        </ol>
+        <h2 class="text-2xl font-semibold mb-4">⚙️ Choose Your Model</h2>
+        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div>
+                <label class="block text-white/70 mb-2">Select Model Type:</label>
+                <select id="modelSelect" class="select">
+                    <option value="lite">Lite</option>
+                    <option value="img">Image</option>
+                    <option value="pro">Pro</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-white/70 mb-2">Select Programming Language:</label>
+                <select id="langSelect" class="select">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="go">Go</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="generateKeyBtn"
+            class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-6 py-2 rounded-lg font-semibold transition">Get
+            API Key</button>
+
+        <div id="apiKeyBox" class="api-key-box hidden"></div>
     </div>
 
-    <!-- Code Section 1 -->
+    <!-- GENERATED CODE PREVIEW -->
     <div class="glass-card w-full max-w-4xl mb-10">
-        <!-- MacOS Header -->
         <div class="mac-header">
             <div class="mac-btn mac-red"></div>
             <div class="mac-btn mac-yellow"></div>
             <div class="mac-btn mac-green"></div>
         </div>
-
-        <!-- Code Block -->
         <div class="relative">
             <button class="copy-btn absolute top-2 right-2">Copy</button>
-            <pre><code>
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-class MLChatbot:
-    def __init__(self, csv_file: str):
-        data = pd.read_csv(csv_file)
-        self.question_list = data["question"].tolist()
-        self.answer_list = data["answer"].tolist()
-
-        self.vectorizer = CountVectorizer()
-        self.X = self.vectorizer.fit_transform(self.question_list)
-
-    def reply(self, user_question: str) -> str:
-        user_vec = self.vectorizer.transform([user_question])
-        similarity = cosine_similarity(user_vec, self.X)
-        idx = similarity.argmax()
-        if similarity[0, idx] < 0.1:
-            return "Sorry, I don't know the answer"
-        return self.answer_list[idx]
-            </code></pre>
+            <pre><code id="codeBlock">
+# Select a model and language above to generate code automatically.
+      </code></pre>
         </div>
     </div>
 
-    <!-- Code Section 2 -->
-    <div class="glass-card w-full max-w-4xl">
-        <!-- MacOS Header -->
-        <div class="mac-header">
-            <div class="mac-btn mac-red"></div>
-            <div class="mac-btn mac-yellow"></div>
-            <div class="mac-btn mac-green"></div>
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-6 mt-16 border-t border-white/20 text-sm text-white/60">
+        <div class="flex justify-center gap-6">
+            <a href="../index.html#home" class="hover:text-white transition">Home</a>
+            <a href="../index.html#features" class="hover:text-white transition">Features</a>
+            <a href="../index.html#technology" class="hover:text-white transition">Technology</a>
+            <a href="../index.html#skills" class="hover:text-white transition">Skills</a>
+            <a href="../index.html#projects" class="hover:text-white transition">Projects</a>
         </div>
-
-        <!-- Code Block -->
-        <div class="relative">
-            <button class="copy-btn absolute top-2 right-2">Copy</button>
-            <pre><code>
-question,answer
-"Who are you?","I am your AI assistant."
-"What is your name?","My name is AI"    
-"Why do we sleep?","To rest and recover energy."
-"How old are you?","I don't have an age, I am an AI."
-            </code></pre>
-        </div>
-    </div>
-    <!-- Footer -->
-<footer class="w-full text-center py-6 mt-16 border-t border-white/20 text-sm text-white/60">
-  <div class="flex justify-center gap-6">
-    <a href="../index.html#home" class="hover:text-white transition">Home</a>
-    <a href="../index.html#features" class="hover:text-white transition">Features</a>
-    <a href="../index.html#technology" class="hover:text-white transition">Technology</a>
-    <a href="../index.html#skills" class="hover:text-white transition">Skills</a>
-    <a href="../index.html#projects" class="hover:text-white transition">Projects</a>
-  </div>
-  <p class="mt-4">&copy; 2025 FX Intelligence. All rights reserved.</p>
-</footer>
-
-
-
+        <p class="mt-4">&copy; 2025 FX Intelligence. All rights reserved.</p>
+    </footer>
 
     <script>
-        document.querySelectorAll(".copy-btn").forEach((btn) => {
+        const apiKeyBox = document.getElementById("apiKeyBox");
+        const modelSelect = document.getElementById("modelSelect");
+        const langSelect = document.getElementById("langSelect");
+        const codeBlock = document.getElementById("codeBlock");
+
+        document.getElementById("generateKeyBtn").addEventListener("click", () => {
+            // generate random number for key
+            const randomKey = `#fx${Math.floor(Math.random() * 999999999)}intelligenceAPI.${Math.floor(Math.random() * 999999999)}#`;
+            const model = modelSelect.value;
+            const lang = langSelect.value;
+            const url = `https://fxdeveloper:8000/${model}/fxintelligence/1.0`;
+
+            apiKeyBox.textContent = randomKey;
+            apiKeyBox.classList.remove("hidden");
+
+            // auto-generate example code snippet based on selected language
+            const codeSamples = {
+                python: `
+import requests
+
+url = "${url}"
+headers = {"Authorization": "${randomKey}"}
+data = {"input": "Hello FX Intelligence"}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+        `,
+                javascript: `
+const url = "${url}";
+const headers = { "Authorization": "${randomKey}" };
+const data = { input: "Hello FX Intelligence" };
+
+fetch(url, {
+  method: "POST",
+  headers,
+  body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(console.log);
+        `,
+                java: `
+import java.net.*;
+import java.io.*;
+
+public class FXModel {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("${url}");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "${randomKey}");
+        conn.setDoOutput(true);
+        conn.getOutputStream().write("{\\"input\\":\\"Hello FX Intelligence\\"}".getBytes());
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line;
+        while ((line = in.readLine()) != null) System.out.println(line);
+    }
+}
+        `,
+                go: `
+package main
+
+import (
+  "bytes"
+  "fmt"
+  "net/http"
+  "io/ioutil"
+)
+
+func main() {
+  url := "${url}"
+  jsonData := []byte(\`{"input":"Hello FX Intelligence"}\`)
+  req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+  req.Header.Set("Authorization", "${randomKey}")
+
+  client := &http.Client{}
+  res, _ := client.Do(req)
+  body, _ := ioutil.ReadAll(res.Body)
+  fmt.Println(string(body))
+}
+        `
+            };
+
+            codeBlock.textContent = codeSamples[lang];
+        });
+
+        // copy button logic
+        document.querySelectorAll(".copy-btn").forEach(btn => {
             btn.addEventListener("click", () => {
-                const codeBlock = btn.nextElementSibling.innerText;
-                navigator.clipboard.writeText(codeBlock).then(() => {
-                    btn.textContent = "Copied ✓";
-                    setTimeout(() => {
-                        btn.textContent = "Copy";
-                    }, 2000);
-                });
+                navigator.clipboard.writeText(codeBlock.textContent.trim());
+                btn.textContent = "Copied ✓";
+                setTimeout(() => btn.textContent = "Copy", 2000);
             });
         });
     </script>

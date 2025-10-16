@@ -1,0 +1,112 @@
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* ==== Animated gradient background (black-blue) ==== */
+    .gradient-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, #000000, #001f4d48, #000000);
+        background-size: 300% 300%;
+        animation: moveGradient 15s ease-in-out infinite;
+        z-index: 0;
+    }
+
+    @keyframes moveGradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ==== Fullscreen Spline Scene ==== */
+    iframe {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        z-index: 1;
+    }
+
+    /* ==== Control Buttons ==== */
+    .controls {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 20px;
+    }
+
+    button {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        font-size: 22px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(6px);
+    }
+
+    button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.05);
+    }
+
+    /* Special style for Close button */
+    .close-btn {
+        background: linear-gradient(180deg, #ff4747, #cc2b2b);
+        border: none;
+        color: #fff;
+    }
+
+    .close-btn:hover {
+        background: linear-gradient(180deg, #ff6b6b, #d63232);
+    }
+
+    /* === Fade-in black overlay saat halaman dibuka === */
+    .fade-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        opacity: 1;
+        z-index: 9999;
+        animation: fadeOut 2s ease-out forwards;
+    }
+
+    /* Animasi fade-out (menghilang) */
+    @keyframes fadeOut {
+        0% {
+            opacity: 5;
+        }
+
+        100% {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }

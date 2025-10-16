@@ -199,6 +199,70 @@
     }
 
 
-#dark-overlay {
-  transition: opacity 0.7s ease;
-}
+    #dark-overlay {
+      transition: opacity 0.7s ease;
+    }
+
+    /* Animasi titik loading */
+    .dot-loading::after {
+      content: '';
+      animation: dots 1.5s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0% {
+        content: '';
+      }
+
+      33% {
+        content: '.';
+      }
+
+      66% {
+        content: '..';
+      }
+
+      100% {
+        content: '...';
+      }
+    }
+
+    /* Blur animasi gambar */
+    .blur-load {
+      filter: blur(12px);
+      transition: filter 1.2s ease-out;
+    }
+
+    .blur-load.loaded {
+      filter: blur(0);
+    }
+
+    .spline-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .spline-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Gradasi gelap di bawah agar watermark samar tapi tidak dihapus */
+    .gradient-cover {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      /* tinggi area fade */
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
+      pointer-events: none;
+      /* biar tidak ganggu klik iframe */
+      z-index: 2;
+    }
