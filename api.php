@@ -1,8 +1,4 @@
 <?php
-// =====================================
-// 🌐 API Gateway FX Intelligence
-// - type = "ai" → kirim ke Python (FastAPI)
-// =====================================
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -14,9 +10,6 @@ $input = json_decode(file_get_contents('php://input'), true);
 $type = $input['type'] ?? '';
 $question = trim($input['question'] ?? '');
 
-// ==========================
-// 🤖 BAGIAN AI FASTAPI
-// ==========================
 if ($type === 'ai') {
     $api_key = '#fx294421231intelligenceAPI.0012112708#';
     $postData = json_encode([
@@ -46,10 +39,6 @@ if ($type === 'ai') {
     echo $response;
     exit;
 }
-
-// ==========================
-// ⚠️ REQUEST INVALID
-// ==========================
 else {
     http_response_code(400);
     header('Content-Type: application/json');

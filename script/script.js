@@ -198,15 +198,15 @@ imgBtn.addEventListener("click", async () => {
   imgResult.innerHTML = `<p class="dot-loading">AI Sedang membuat gambar</p>`;
 
   try {
-    // buat seed random biar setiap generate unik
+
+
     const seed = Math.floor(Math.random() * 10000000);
-    const model = "gptimage"; // bisa diganti ke "turbo" kalau mau cepat
-    const enhance = true;     // true/false
-    const width = 576;        // default ukuran
+    const model = "turbo"; 
+    const enhance = true;    
+    const width = 576;        
 
     const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${width}&seed=${seed}&enhance=${enhance}&nologo=true&model=${model}`;
 
-    // Delay biar kelihatan loading
     setTimeout(() => {
       const fileName = prompt.replace(/[^a-z0-9]/gi, "_").toLowerCase() + ".png";
 
@@ -279,3 +279,24 @@ document.addEventListener("click", () => {
     console.warn("⚠️ Masih belum diizinkan, user harus klik langsung halaman utama.");
   });
 }, { once: true });
+
+  function animateProgressBars() {
+    document.querySelectorAll('.progress-bar').forEach((bar, i) => {
+      const percent = parseInt(bar.getAttribute('data-percent'));
+      const counter = bar.parentElement.nextElementSibling; // ambil elemen angka di kanan
+      let current = 0;
+
+      // animasi lebar
+      bar.style.transition = "width 2s ease-out";
+      bar.style.width = percent + "%";
+
+      // animasi angka naik
+      const interval = setInterval(() => {
+        current++;
+        counter.textContent = current + "%";
+        if (current >= percent) clearInterval(interval);
+      }, 2000 / percent);
+    });
+  }
+
+  window.addEventListener("load", animateProgressBars);

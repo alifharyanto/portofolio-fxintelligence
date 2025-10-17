@@ -1,6 +1,5 @@
-// ===== Config =====
-const FX_API_URL = "http://localhost:8080/api.php"; // AI backend
-const TTS_URL = "http://127.0.0.1:8080/tts";       // TTS backend Python
+
+const FX_API_URL = "http://localhost:8080/api.php";
 
 let isPaused = false;
 let speaking = false;
@@ -8,7 +7,6 @@ let isListening = false;
 let autoplayUnlocked = false;
 let isRecognitionRunning = false;
 
-// ===== Unlock autoplay untuk browser =====
 document.addEventListener("click", () => {
     if (!autoplayUnlocked) {
         const dummy = new Audio();
@@ -20,7 +18,7 @@ document.addEventListener("click", () => {
     }
 }, { once: true });
 
-// ===== Speech Recognition =====
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
 
@@ -30,24 +28,12 @@ if (SpeechRecognition) {
     recognition.interimResults = false;
     recognition.continuous = true;
 
-    recognition.onstart = () => {
-        console.log("🎤 Speech recognition dimulai...");
-        isRecognitionRunning = true;
-    };
-
-    recognition.onerror = (e) => {
-        console.error("⚠️ Speech error:", e.error);
-        isRecognitionRunning = false;
-    };
-
+    recognition.onstart = () => { console.log("🎤 Speech recognition dimulai..."); isRecognitionRunning = true; };
+    recognition.onerror = (e) => { console.error("⚠️ Speech error:", e.error); isRecognitionRunning = false; };
     recognition.onend = () => {
-        console.log("🛑 Speech recognition berhenti");
-        isRecognitionRunning = false;
-        if (isListening && !speaking) setTimeout(() => {
-            if (!isRecognitionRunning) recognition.start();
-        }, 500);
+        console.log("🛑 Speech recognition berhenti"); isRecognitionRunning = false;
+        if (isListening && !speaking) setTimeout(() => { if (!isRecognitionRunning) recognition.start(); }, 500);
     };
-
     recognition.onresult = (event) => {
         const transcript = event.results[event.results.length - 1][0].transcript.trim();
         console.log("🗣️ Kamu:", transcript);
@@ -55,7 +41,7 @@ if (SpeechRecognition) {
     };
 } else alert("Browser tidak mendukung Speech Recognition.");
 
-// ===== Tombol Mic =====
+// === Tombol Mic ===
 const micBtn = document.getElementById("micBtn");
 if (micBtn) {
     micBtn.addEventListener("click", () => {
@@ -73,18 +59,16 @@ if (micBtn) {
     });
 }
 
-// ===== Fungsi utama respon AI =====
+// === Fungsi utama respon AI ===
 async function aiRespond(text) {
     if (speaking || isPaused) return;
     console.log("📡 Mengirim ke AI:", text);
-
     const reply = await getAIReply(text);
     console.log("🤖 AI Jawaban Diterima:", reply);
-
-    await speakWithTTS(reply);
+    speakWithWebTTS(reply, "id"); // default ID female
 }
 
-// ===== Ambil jawaban dari PHP (AI backend) =====
+// === Ambil jawaban dari PHP (→ Python backend) ===
 async function getAIReply(question) {
     try {
         const response = await fetch(FX_API_URL, {
@@ -100,38 +84,50 @@ async function getAIReply(question) {
     }
 }
 
-// ===== TTS via backend Python =====
-async function speakWithTTS(message) {
-    if (!message || isPaused) return;
+function speakWithWebTTS(message, lang = "id", gender = "female") {
+    if (!window.speechSynthesis) {
+        console.warn("Browser tidak mendukung Speech Synthesis");
+        return;
+    }
     speaking = true;
 
-    try {
-        const response = await fetch(TTS_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: message })
-        });
+    const utter = new SpeechSynthesisUtterance(message);
+    utter.lang = lang === "en" ? "en-US" : "id-ID";
 
-        if (!response.ok) throw new Error("Gagal ambil audio TTS");
+    const voices = speechSynthesis.getVoices();
 
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+    const selectedVoice = voices.find(v => 
+        v.lang.startsWith(utter.lang) &&
+        ((gender === "female" && v.name.toLowerCase().includes("female")) ||
+         (gender === "male" && v.name.toLowerCase().includes("male")))
+    ) || voices.find(v => v.lang.startsWith(utter.lang)) 
+      || voices[0];
 
-        audio.onended = () => {
-            console.log("🔊 Selesai bicara");
-            speaking = false;
-            if (isListening && !isRecognitionRunning) recognition.start();
-        };
+    utter.voice = selectedVoice;
 
-        await audio.play().catch(err => {
-            console.warn("⚠️ Autoplay dicegah, klik halaman untuk mengizinkan:", err);
-            speaking = false;
-        });
-
-    } catch (err) {
-        console.error("❌ Error TTS:", err);
+    utter.onend = () => {
         speaking = false;
         if (isListening && !isRecognitionRunning) recognition.start();
-    }
+        console.log(`🔊 Selesai bicara dengan voice: ${utter.voice.name}`);
+    };
+
+    speechSynthesis.speak(utter);
+}
+
+const langBtn = document.getElementById("langBtn");
+if (langBtn) {
+    langBtn.addEventListener("click", () => {
+        const newLang = langBtn.dataset.lang === "id" ? "en" : "id";
+        langBtn.dataset.lang = newLang;
+        console.log(`🌐 Bahasa TTS diganti menjadi: ${newLang}`);
+    });
+}
+
+const genderBtn = document.getElementById("genderBtn");
+if (genderBtn) {
+    genderBtn.addEventListener("click", () => {
+        const newGender = genderBtn.dataset.gender === "female" ? "male" : "female";
+        genderBtn.dataset.gender = newGender;
+        console.log(`🌐 Gender TTS diganti menjadi: ${newGender}`);
+    });
 }

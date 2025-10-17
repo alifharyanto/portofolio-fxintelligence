@@ -25,7 +25,6 @@ $result = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// Set header audio dan kirim hasil
 if ($http_code === 200 && $result) {
     header("Content-Type: audio/mpeg");
     echo $result;
